@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMNI PROJECT - Ultimate Roblox Software</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <!-- Background Effects -->
+    <div class="bg-noise"></div>
+    <div class="bg-rays"></div>
+    <div class="bg-mouse-glow"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>OMNI PROJECT</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/download">Download</a></li>
+                <li><a href="http://omnihubik.mooo.com/status" target="_blank">Status</a></li>
+                <li><a href="https://discord.gg/4NDBJasN" target="_blank">Support</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <!-- Dynamically updated by JS -->
+            <a href="/login" class="btn btn-fill" id="headerAuthBtn">
+                <i class="fa-solid fa-right-to-bracket"></i> <span>Login</span>
+            </a>
+            <div class="user-avatar" id="userAvatar" style="display: none;">?</div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>DOMINATE WITH <br><span style="color: var(--accent);">PRECISION</span></h1>
+        <p>Advanced executor tools for Roblox. Bypass anti-cheats with our state-of-the-art injection technology.</p>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+            <a href="/download" class="btn btn-fill" style="padding: 1rem 2rem; font-size: 1rem;">
+                <i class="fa-brands fa-windows"></i> Get Loader
+            </a>
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="btn btn-blur"
+                style="padding: 1rem 2rem; font-size: 1rem;">
+                <i class="fa-solid fa-play"></i> Watch Demo
+            </a>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <div class="container">
+        <h2 class="section-title">AVAILABLE SOFTWARE</h2>
+        <div class="grid-3">
+            <!-- CS2 Card -->
+            <div class="card">
+                <h3><i class="fa-solid fa-crosshairs"></i> CS2 AEGIS</h3>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-check"></i> Aimbot / Triggerbot</li>
+                    <li><i class="fa-solid fa-check"></i> ESP / Wallhack</li>
+                    <li><i class="fa-solid fa-check"></i> Skin Changer</li>
+                    <li><i class="fa-solid fa-shield-halved"></i> VAC Live Bypass</li>
+                </ul>
+                <div class="price-tag">
+                    <span class="price-val">$5 <span
+                            style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 400;">/
+                            mo</span></span>
+                    <button class="btn btn-blur">Purchase</button>
+                </div>
+            </div>
+
+            <!-- Roblox Card -->
+            <div class="card" style="border-color: var(--accent); box-shadow: 0 0 30px rgba(102, 165, 238, 0.1);">
+                <div
+                    style="position: absolute; top: 0; right: 0; background: var(--accent); color: #000; padding: 4px 12px; font-weight: 700; font-size: 0.7rem; border-bottom-left-radius: 8px;">
+                    POPULAR</div>
+                <h3><i class="fa-solid fa-cube"></i> ROBLOX OMNI</h3>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-check"></i> Level 8 Executor</li>
+                    <li><i class="fa-solid fa-check"></i> 100% UNC Supported</li>
+                    <li><i class="fa-solid fa-check"></i> Script Hub w/ 500+ Games</li>
+                    <li><i class="fa-solid fa-check"></i> Hyperion Bypass</li>
+                </ul>
+                <div class="price-tag">
+                    <span class="price-val">$1 <span
+                            style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 400;">/
+                            mo</span></span>
+                    <button class="btn btn-fill" style="width: 100%;">Purchase</button>
+                </div>
+            </div>
+
+            <!-- PUBG Mobile Card -->
+            <div class="card">
+                <h3><i class="fa-solid fa-mobile-screen"></i> PUBG MOBILE PRO</h3>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-check"></i> Magic Bullet</li>
+                    <li><i class="fa-solid fa-check"></i> ESP & Items</li>
+                    <li><i class="fa-solid fa-check"></i> Instant Hit</li>
+                    <li><i class="fa-solid fa-shield-halved"></i> Emulator Safe</li>
+                </ul>
+                <div class="price-tag">
+                    <span class="price-val">$8 <span
+                            style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 400;">/
+                            mo</span></span>
+                    <button class="btn btn-blur">Purchase</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advantages -->
+    <div class="container" style="margin-top: 6rem; text-align: center;">
+        <h2 class="section-title">WHY CHOOSE US</h2>
+        <div class="grid-3">
+            <div class="card" style="align-items: center; text-align: center; padding: 3rem 2rem;">
+                <i class="fa-solid fa-fingerprint"
+                    style="font-size: 2.5rem; color: var(--accent); margin-bottom: 1.5rem;"></i>
+                <h3 style="justify-content: center;">Unique Builds</h3>
+                <p style="color: var(--text-secondary);">Every user receives a unique, polymorphic build to prevent
+                    signature detection.</p>
+            </div>
+            <div class="card" style="align-items: center; text-align: center; padding: 3rem 2rem;">
+                <i class="fa-solid fa-bolt" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 1.5rem;"></i>
+                <h3 style="justify-content: center;">Instant Updates</h3>
+                <p style="color: var(--text-secondary);">Updates are delivered automatically via our cloud loader within
+                    minutes of game patches.</p>
+            </div>
+            <div class="card" style="align-items: center; text-align: center; padding: 3rem 2rem;">
+                <i class="fa-solid fa-headset"
+                    style="font-size: 2.5rem; color: var(--accent); margin-bottom: 1.5rem;"></i>
+                <h3 style="justify-content: center;">24/7 Support</h3>
+                <p style="color: var(--text-secondary);">Our team is always online to assist with setup, configuration,
+                    and troubleshooting.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="logo" style="margin-bottom: 1rem;">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span>OMNI PROJECT</span>
+                    </div>
+                </div>
+                <div>
+                    <h4>Product</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="/download">Download</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="http://omnihubik.mooo.com/status" target="_blank">API Status</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="https://discord.gg/4NDBJasN" target="_blank">Contact</a></li>
+                        <li><a href="#">Partners</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="margin-top: 3rem; text-align: center; color: rgba(255,255,255,0.2); font-size: 0.8rem;">
+                &copy; 2026 Omni Project. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Profile Modal -->
+    <div class="modal" id="profileModal">
+        <div class="profile-modal-content">
+            <div class="profile-header">
+                <button class="close-modal" id="closeProfileModal"
+                    style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem;">&times;</button>
+                <div class="profile-avatar-large" id="profAvatar">U</div>
+                <div class="profile-info">
+                    <h3 id="profUsername">Username</h3>
+                    <div class="status-badge" id="profBadge">Active User</div>
+                </div>
+            </div>
+            <div class="dashboard-body">
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <span>Subscription</span>
+                        <strong id="profSubDays">Standard</strong>
+                    </div>
+                    <div class="stat-card">
+                        <span>HWID Status</span>
+                        <strong id="profHwid" style="color: #4ade80;">Linked</strong>
+                    </div>
+                    <div class="stat-card">
+                        <span>Balance</span>
+                        <strong>$0.00</strong>
+                    </div>
+                    <div class="stat-card">
+                        <span>UID</span>
+                        <strong id="profUid">#0000</strong>
+                    </div>
+                </div>
+
+                <div class="action-row">
+                    <button class="btn btn-blur" onclick="alert('HWID Reset Request Sent')">
+                        <i class="fa-solid fa-microchip"></i> Reset HWID
+                    </button>
+                    <button class="btn btn-blur" onclick="window.open('https://discord.gg/4NDBJasN', '_blank')">
+                        <i class="fa-brands fa-discord"></i> Discord
+                    </button>
+                    <button class="btn btn-blur" id="btnAdminPanel"
+                        style="display: none; border-color: rgba(255, 77, 77, 0.3);">
+                        <i class="fa-solid fa-user-shield"></i> Admin
+                    </button>
+                    <button class="btn btn-fill" onclick="logout()" style="background: #2a2d30; color: #ff4d4d;">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div class="modal" id="adminModal">
+        <div class="profile-modal-content" style="max-width: 900px;">
+            <div class="admin-header">
+                <h2><i class="fa-solid fa-shield-halved"></i> Admin Control Panel</h2>
+                <button class="close-modal-admin" id="closeAdminModal">&times;</button>
+            </div>
+
+            <div class="admin-body">
+                <!-- Tabs -->
+                <div
+                    style="display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+                    <button class="btn btn-fill" id="tabUsersBtn"
+                        style="padding: 0.5rem 1rem; font-size: 0.8rem;">Users</button>
+                    <button class="btn btn-blur" id="tabIpsBtn" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Blocked
+                        IPs</button>
+                </div>
+
+                <!-- Stats Row -->
+                <div class="admin-stats">
+                    <div class="a-stat">
+                        <h3>Total Users</h3>
+                        <span id="admTotalUsers">0</span>
+                    </div>
+                    <div class="a-stat">
+                        <h3>Banned Users</h3>
+                        <span id="admBannedUsers" style="color: #ff4d4d;">0</span>
+                    </div>
+                    <div class="a-stat">
+                        <h3>Blocked IPs</h3>
+                        <span id="admBlockedIpsCount" style="color: #ff4d4d;">0</span>
+                    </div>
+                </div>
+
+                <!-- Users Section -->
+                <div id="adminUsersSection">
+                    <div class="admin-controls">
+                        <button class="btn btn-fill" id="refreshAdminBtn"><i class="fa-solid fa-rotate"></i>
+                            Refresh</button>
+                        <input type="text" id="adminSearch" placeholder="Search username/IP..." class="admin-search">
+                    </div>
+                    <div class="admin-table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>IP Address</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminUserList"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- IPs Section (Hidden by default) -->
+                <div id="adminIpsSection" style="display: none;">
+                    <div class="admin-controls">
+                        <input type="text" id="ipInput" placeholder="Enter IP to ban..." class="admin-search">
+                        <button class="btn btn-fill" id="banIpBtn" style="background: #ff4d4d; color: white;">Ban
+                            IP</button>
+                    </div>
+                    <div class="admin-table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>IP Address</th>
+                                    <th>Date Banned</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminIpList"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Logic -->
+    <script src="script.js"></script>
+</body>
+</html>

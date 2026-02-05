@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download - OMNI PROJECT</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        /* Download page specific styles */
+        .download-container {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .download-card {
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            padding: 3rem;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .download-icon {
+            font-size: 4rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite alternate;
+        }
+        
+        .download-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .version-info {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+        
+        /* Animation for download buttons */
+        @keyframes downloadPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .btn-download:hover {
+            animation: downloadPulse 0.5s ease;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .download-card {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .download-icon {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="no-fouc download-page">
+    <!-- Background Effects -->
+    <div class="bg-noise"></div>
+    <div class="bg-rays"></div>
+    <div class="bg-mouse-glow"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>OMNI PROJECT</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="https://discord.gg/4NDBJasN" target="_blank">Support</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Download Content -->
+    <div class="container download-container">
+        <div class="card download-card fade-up">
+            <i class="fa-brands fa-windows download-icon"></i>
+            <h2 style="margin-bottom: 1rem;">Download OMNI Loader</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2.5rem;">
+                Select your preferred download method. For the best support and community access, we recommend joining
+                our Discord server.
+            </p>
+
+            <div class="download-options">
+                <a href="https://discord.gg/4NDBJasN" target="_blank" class="btn btn-fill btn-download"
+                    style="background: #5865F2; color: white; justify-content: center; padding: 1rem;">
+                    <i class="fa-brands fa-discord"></i> Download via Discord
+                </a>
+                <a href="https://example.com/download/omni-loader.exe" target="_blank" class="btn btn-blur btn-download"
+                    style="justify-content: center; padding: 1rem;">
+                    <i class="fa-solid fa-download"></i> Direct Download
+                </a>
+                <a href="#" class="btn btn-blur" style="justify-content: center; padding: 1rem; font-size: 0.8rem;">
+                    <i class="fa-solid fa-file-arrow-down"></i> Alternative Mirror
+                </a>
+            </div>
+
+            <div class="version-info">
+                <p>Version 2.4.1 | Updated: Jan 14, 2026</p>
+                <p style="margin-top: 0.5rem; font-size: 0.7rem;">
+                    System Requirements: Windows 10/11, 8GB RAM, .NET Framework 4.8
+                </p>
+            </div>
+            
+            <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+                <p style="color: var(--text-secondary); font-size: 0.75rem;">
+                    <i class="fa-solid fa-shield-halved" style="color: var(--accent); margin-right: 5px;"></i>
+                    File is digitally signed and verified. Windows Defender may show a warning - this is normal.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script src="../script.js"></script>
+    
+    <!-- Download page specific script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.remove('no-fouc');
+            document.body.classList.add('loaded');
+            
+            // Add animation to card
+            const card = document.querySelector('.download-card');
+            if (card) {
+                card.classList.add('fade-up');
+                card.style.animationDelay = '0.3s';
+            }
+            
+            // Mouse glow effect
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth) * 100;
+                const y = (e.clientY / window.innerHeight) * 100;
+                document.body.style.setProperty('--mx', `${x}%`);
+                document.body.style.setProperty('--my', `${y}%`);
+            });
+            
+            // Button click effects
+            document.querySelectorAll('.btn-download').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+            
+            console.log("📥 Download page ready");
+        });
+    </script>
+</body>
+</html>

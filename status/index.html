@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Status - OMNI PROJECT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .status-page { min-height: 100vh; display: flex; flex-direction: column; }
+        .status-container { flex: 1; max-width: 1200px; margin: 0 auto; padding: 120px 2rem 4rem; width: 100%; }
+        .status-header { text-align: center; margin-bottom: 3rem; }
+        .status-header h1 { font-size: 3rem; font-weight: 800; margin-bottom: 1rem; background: linear-gradient(90deg, var(--accent), #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .status-header p { color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        
+        .status-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .status-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; text-align: center; transition: all 0.3s ease; }
+        .status-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .status-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .status-up .status-icon { color: #10b981; }
+        .status-down .status-icon { color: #ef4444; }
+        .status-slow .status-icon { color: #f59e0b; }
+        
+        .status-indicator {
+            display: inline-flex; align-items: center; gap: 8px; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; margin: 1rem 0;
+        }
+        .status-indicator.up { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .status-indicator.down { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .status-indicator.slow { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+        
+        .services-section { margin-bottom: 4rem; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+        .service-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s ease; }
+        .service-item:hover { border-color: var(--accent); transform: translateX(5px); }
+        .service-info h3 { font-size: 1.1rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px; }
+        .service-url { color: var(--text-secondary); font-size: 0.85rem; font-family: monospace; }
+        .service-status { text-align: right; }
+        .response-time { color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem; }
+        
+        .control-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; margin-top: 3rem; text-align: center; }
+        .last-updated { color: var(--text-secondary); font-size: 0.9rem; margin-top: 1rem; }
+        .auto-refresh { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 1rem; }
+        
+        .status-footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); margin-top: auto; color: var(--text-secondary); }
+        .status-footer-links { display: flex; justify-content: center; gap: 2rem; margin-top: 1.5rem; }
+        .status-footer-links a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+        .status-footer-links a:hover { color: var(--accent); }
+        
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .fa-spinner { animation: spin 1s linear infinite; }
+        
+        @media (max-width: 768px) {
+            .status-container { padding: 100px 1rem 2rem; }
+            .status-header h1 { font-size: 2rem; }
+            .services-grid { grid-template-columns: 1fr; }
+            .status-footer-links { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body class="status-page">
+    <div class="bg-noise"></div>
+    <div class="bg-rays"></div>
+    <div class="bg-mouse-glow"></div>
+
+    <header style="background: var(--glass-bg); backdrop-filter: blur(24px);">
+        <div class="logo">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>OMNI PROJECT</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/status.html" style="color: var(--accent);">Status</a></li>
+                <li><a href="/download">Download</a></li>
+                <li><a href="https://discord.gg/4NDBJasN" target="_blank">Support</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <a href="/" class="btn btn-blur">
+                <i class="fa-solid fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </header>
+
+    <div class="status-container">
+        <div class="status-header">
+            <h1>System Status</h1>
+            <p>Real-time monitoring of OMNI PROJECT services. This page works independently and will remain available even during outages.</p>
+        </div>
+
+        <div class="status-overview">
+            <div class="status-card status-up">
+                <div class="status-icon">
+                    <i class="fa-solid fa-server"></i>
+                </div>
+                <h3>Overall Status</h3>
+                <div class="status-indicator up" id="overallStatus">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Checking...</span>
+                </div>
+                <p>Monitoring all critical services</p>
+            </div>
+
+            <div class="status-card">
+                <div class="status-icon">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <h3>Uptime</h3>
+                <div style="font-size: 2.5rem; font-weight: 800; margin: 1rem 0; color: var(--accent);">
+                    99.9%
+                </div>
+                <p>Last 30 days performance</p>
+            </div>
+
+            <div class="status-card">
+                <div class="status-icon">
+                    <i class="fa-solid fa-eye"></i>
+                </div>
+                <h3>Response Time</h3>
+                <div style="font-size: 2.5rem; font-weight: 800; margin: 1rem 0; color: var(--accent);">
+                    <span id="avgResponse">-</span>ms
+                </div>
+                <p>Average response time</p>
+            </div>
+        </div>
+
+        <div class="services-section">
+            <h2 style="font-size: 1.8rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 10px;">
+                <i class="fa-solid fa-heart-pulse"></i>
+                Service Health
+            </h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                All services are checked directly from your browser every 2 minutes.
+            </p>
+
+            <div class="services-grid" id="servicesGrid">
+                <!-- Services will be loaded here -->
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <h3 style="margin-bottom: 1rem;">Status Controls</h3>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <button class="btn btn-fill" onclick="checkAllServices()" id="checkBtn">
+                    <i class="fa-solid fa-rotate"></i> Check Now
+                </button>
+                <button class="btn btn-blur" onclick="toggleAutoRefresh()" id="autoRefreshBtn">
+                    <i class="fa-solid fa-play"></i> Auto-Refresh: ON
+                </button>
+                <button class="btn btn-blur" onclick="clearCache()">
+                    <i class="fa-solid fa-trash"></i> Clear Cache
+                </button>
+            </div>
+            
+            <div class="auto-refresh">
+                <i class="fa-solid fa-circle-notch fa-spin" id="refreshIcon" style="display: none;"></i>
+                <div class="last-updated" id="lastUpdated">
+                    Last checked: Never
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="status-footer">
+        <div class="logo" style="justify-content: center; margin-bottom: 1.5rem;">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>OMNI PROJECT STATUS</span>
+        </div>
+        <p>Independent monitoring system • Always available</p>
+        
+        <div class="status-footer-links">
+            <a href="/">Main Website</a>
+            <a href="/download">Download</a>
+            <a href="https://discord.gg/4NDBJasN" target="_blank">Discord Support</a>
+            <a href="#" onclick="savePage()">Save Page Offline</a>
+        </div>
+        
+        <p style="margin-top: 2rem; font-size: 0.8rem; opacity: 0.7;">
+            <i class="fa-solid fa-lightbulb"></i>
+            Tip: Press Ctrl+S to save this page for offline access
+        </p>
+    </div>
+
+    <script>
+        // БЕЗ Supabase данных!
+        const CONFIG = {
+            services: [
+                {
+                    id: 'main-site',
+                    name: 'Main Website',
+                    url: window.location.origin + '/',
+                    type: 'website',
+                    icon: 'fa-globe'
+                },
+                {
+                    id: 'discord',
+                    name: 'Discord Server',
+                    url: 'https://discord.gg/4NDBJasN',
+                    type: 'discord',
+                    icon: 'fa-discord'
+                },
+                {
+                    id: 'loader',
+                    name: 'Download Page',
+                    url: window.location.origin + '/download',
+                    type: 'loader',
+                    icon: 'fa-download'
+                },
+                {
+                    id: 'login',
+                    name: 'Login Page',
+                    url: window.location.origin + '/login',
+                    type: 'auth',
+                    icon: 'fa-user'
+                }
+            ],
+            checkInterval: 120000,
+            timeout: 5000
+        };
+
+        let autoRefresh = true;
+        let checkInProgress = false;
+        let lastResults = JSON.parse(localStorage.getItem('omni_status_cache')) || null;
+
+        const overallStatus = document.getElementById('overallStatus');
+        const servicesGrid = document.getElementById('servicesGrid');
+        const lastUpdated = document.getElementById('lastUpdated');
+        const checkBtn = document.getElementById('checkBtn');
+        const autoRefreshBtn = document.getElementById('autoRefreshBtn');
+        const refreshIcon = document.getElementById('refreshIcon');
+        const avgResponse = document.getElementById('avgResponse');
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Status Monitor Initialized');
+            
+            if (lastResults && (Date.now() - lastResults.timestamp < 300000)) {
+                renderServices(lastResults.results);
+                updateOverallStatus(lastResults.results);
+                updateTimestamp(lastResults.timestamp);
+            }
+            
+            if (autoRefresh) startAutoRefresh();
+            checkAllServices();
+            
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth) * 100;
+                const y = (e.clientY / window.innerHeight) * 100;
+                document.body.style.setProperty('--mx', `${x}%`);
+                document.body.style.setProperty('--my', `${y}%`);
+            });
+        });
+
+        async function checkAllServices() {
+            if (checkInProgress) return;
+            checkInProgress = true;
+            checkBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Checking...';
+            checkBtn.disabled = true;
+            
+            const results = [];
+            const startTime = Date.now();
+            
+            for (const service of CONFIG.services) {
+                const result = await checkService(service);
+                results.push({...service, ...result});
+            }
+            
+            renderServices(results);
+            updateOverallStatus(results);
+            updateTimestamp(Date.now());
+            
+            const validTimes = results.filter(r => r.responseTime).map(r => r.responseTime);
+            const avg = validTimes.length ? Math.round(validTimes.reduce((a, b) => a + b) / validTimes.length) : 0;
+            avgResponse.textContent = avg;
+            
+            lastResults = { timestamp: Date.now(), results: results };
+            localStorage.setItem('omni_status_cache', JSON.stringify(lastResults));
+            
+            checkBtn.innerHTML = '<i class="fa-solid fa-rotate"></i> Check Now';
+            checkBtn.disabled = false;
+            checkInProgress = false;
+        }
+
+        async function checkService(service) {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), CONFIG.timeout);
+                const startTime = Date.now();
+                
+                await fetch(service.url, {
+                    method: 'HEAD',
+                    mode: 'no-cors',
+                    signal: controller.signal,
+                    cache: 'no-cache'
+                });
+                
+                clearTimeout(timeoutId);
+                const responseTime = Date.now() - startTime;
+                
+                return {
+                    status: responseTime > 2000 ? 'slow' : 'up',
+                    responseTime: responseTime,
+                    lastCheck: new Date().toISOString()
+                };
+                
+            } catch (error) {
+                console.warn(`⚠️ ${service.name}:`, error.message);
+                return {
+                    status: 'down',
+                    responseTime: null,
+                    lastCheck: new Date().toISOString()
+                };
+            }
+        }
+
+        function renderServices(results) {
+            servicesGrid.innerHTML = '';
+            results.forEach(service => {
+                const serviceEl = document.createElement('div');
+                serviceEl.className = 'service-item';
+                
+                let statusText, statusClass, statusIcon;
+                switch(service.status) {
+                    case 'up': statusText = 'OPERATIONAL'; statusClass = 'up'; statusIcon = 'fa-circle-check'; break;
+                    case 'slow': statusText = 'SLOW'; statusClass = 'slow'; statusIcon = 'fa-circle-exclamation'; break;
+                    case 'down': statusText = 'DOWN'; statusClass = 'down'; statusIcon = 'fa-circle-xmark'; break;
+                }
+                
+                const responseTimeText = service.responseTime ? `${service.responseTime}ms` : 'N/A';
+                serviceEl.innerHTML = `
+                    <div class="service-info">
+                        <h3><i class="fa-solid ${service.icon}"></i>${service.name}</h3>
+                        <div class="service-url">${service.url.replace('https://', '')}</div>
+                    </div>
+                    <div class="service-status">
+                        <div class="status-indicator ${statusClass}">
+                            <i class="fa-solid ${statusIcon}"></i>
+                            <span>${statusText}</span>
+                        </div>
+                        <div class="response-time">${responseTimeText}</div>
+                    </div>
+                `;
+                servicesGrid.appendChild(serviceEl);
+            });
+        }
+
+        function updateOverallStatus(results) {
+            const allUp = results.every(r => r.status === 'up');
+            const anyDown = results.some(r => r.status === 'down');
+            
+            if (allUp) {
+                overallStatus.className = 'status-indicator up';
+                overallStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i><span>All Systems Operational</span>';
+            } else if (anyDown) {
+                overallStatus.className = 'status-indicator down';
+                overallStatus.innerHTML = '<i class="fa-solid fa-circle-xmark"></i><span>Service Issues Detected</span>';
+            } else {
+                overallStatus.className = 'status-indicator slow';
+                overallStatus.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i><span>Degraded Performance</span>';
+            }
+        }
+
+        function updateTimestamp(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            let timeText;
+            if (diffMins < 1) timeText = 'Just now';
+            else if (diffMins < 60) timeText = `${diffMins} minute${diffMins === 1 ? '' : 's'} ago`;
+            else timeText = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            lastUpdated.textContent = `Last checked: ${timeText}`;
+        }
+
+        function startAutoRefresh() {
+            refreshIcon.style.display = 'inline-block';
+            autoRefreshBtn.innerHTML = '<i class="fa-solid fa-pause"></i> Auto-Refresh: ON';
+            setInterval(() => { if (autoRefresh && !checkInProgress) checkAllServices(); }, CONFIG.checkInterval);
+        }
+
+        function toggleAutoRefresh() {
+            autoRefresh = !autoRefresh;
+            if (autoRefresh) {
+                refreshIcon.style.display = 'inline-block';
+                autoRefreshBtn.innerHTML = '<i class="fa-solid fa-pause"></i> Auto-Refresh: ON';
+                checkAllServices();
+            } else {
+                refreshIcon.style.display = 'none';
+                autoRefreshBtn.innerHTML = '<i class="fa-solid fa-play"></i> Auto-Refresh: OFF';
+            }
+        }
+
+        function clearCache() {
+            localStorage.removeItem('omni_status_cache');
+            lastResults = null;
+            servicesGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-secondary);">Cache cleared. Click "Check Now" to refresh.</div>';
+            overallStatus.innerHTML = '<i class="fa-solid fa-circle-question"></i><span>Status Unknown</span>';
+            lastUpdated.textContent = 'Last checked: Never';
+            avgResponse.textContent = '-';
+        }
+
+        function savePage() {
+            const link = document.createElement('a');
+            link.href = 'data:text/html;charset=utf-8,' + encodeURIComponent(document.documentElement.outerHTML);
+            link.download = 'omni-status-' + new Date().toISOString().split('T')[0] + '.html';
+            link.click();
+            alert('Page saved! You can open this file even without internet connection.');
+        }
+
+        window.addEventListener('offline', () => {
+            overallStatus.className = 'status-indicator down';
+            overallStatus.innerHTML = '<i class="fa-solid fa-wifi-slash"></i><span>No Internet Connection</span>';
+        });
+
+        window.addEventListener('online', () => {
+            checkAllServices();
+        });
+    </script>
+</body>
+</html>

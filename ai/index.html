@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMNI AI - Ultimate AI Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        /* Стили как в предыдущем коде... */
+        /* (оставь все стили из предыдущего ответа) */
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="bg-noise"></div>
+    <div class="bg-rays"></div>
+    <div class="bg-mouse-glow"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-brain"></i>
+            <span>OMNI AI</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/download">Download</a></li>
+                <li><a href="/status">Status</a></li>
+                <li><a href="/ai" class="active">AI Assistant</a></li>
+                <li><a href="https://discord.gg/4NDBJasN" target="_blank">Support</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <div class="user-avatar" id="userAvatar" style="display: none;" onclick="showProfile()">U</div>
+            <div id="userInfo" style="display: none; color: var(--text-secondary); font-size: 0.9rem;">
+                <span id="currentUser"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main AI Interface -->
+    <div class="ai-container">
+        <div class="ai-header">
+            <h1>OMNI AI ASSISTANT</h1>
+            <p>Real AI integration with Ollama API. Ask anything and get intelligent responses.</p>
+        </div>
+
+        <div class="ai-main-grid">
+            <!-- Sidebar -->
+            <div class="ai-sidebar">
+                <div class="ai-model-section">
+                    <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-microchip"></i> SELECT MODEL</h3>
+                    <div class="ai-model-list" id="modelList">
+                        <div class="loading">Loading models...</div>
+                    </div>
+                    <button class="btn btn-blur" onclick="loadModels()" style="width: 100%; margin-top: 10px; padding: 10px;">
+                        <i class="fa-solid fa-rotate"></i> Refresh Models
+                    </button>
+                </div>
+
+                <div class="ai-commands-section">
+                    <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-bolt"></i> QUICK COMMANDS</h3>
+                    <button class="ai-command-btn" onclick="loadChatHistory()">
+                        <i class="fa-solid fa-history"></i> Load History
+                    </button>
+                    <button class="ai-command-btn" onclick="clearChat()">
+                        <i class="fa-solid fa-trash"></i> Clear Chat
+                    </button>
+                    <button class="ai-command-btn" onclick="checkAllModels()">
+                        <i class="fa-solid fa-vial"></i> Test Models
+                    </button>
+                    <button class="ai-command-btn" onclick="showLogsTab()">
+                        <i class="fa-solid fa-file-lines"></i> View Logs
+                    </button>
+                    <button class="ai-command-btn" onclick="showAPITab()">
+                        <i class="fa-solid fa-plug"></i> API Status
+                    </button>
+                </div>
+
+                <div class="ai-stats">
+                    <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-chart-line"></i> STATISTICS</h3>
+                    <div class="ai-stat-item">
+                        <span>Current Model</span>
+                        <span id="currentModelStat">Not selected</span>
+                    </div>
+                    <div class="ai-stat-item">
+                        <span>Messages</span>
+                        <span id="messageCount">0</span>
+                    </div>
+                    <div class="ai-stat-item">
+                        <span>API Calls</span>
+                        <span id="apiCallCount">0</span>
+                    </div>
+                    <div class="ai-stat-item">
+                        <span>Ollama Status</span>
+                        <span id="ollamaStatusText" style="color: #f59e0b;">Checking...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Chat -->
+            <div class="ai-chat-container">
+                <div class="ai-chat-header">
+                    <h3><i class="fa-solid fa-comments"></i> AI CHAT INTERFACE</h3>
+                    <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 5px;">
+                        Connected to: <span id="currentModelLabel">No model selected</span>
+                        <span id="modelStatusBadge" style="margin-left: 10px; font-size: 0.8rem; padding: 2px 8px; border-radius: 10px; background: rgba(255,255,255,0.1);"></span>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="ai-tab-bar">
+                    <button class="ai-tab active" onclick="switchTab('chat')">💬 Chat</button>
+                    <button class="ai-tab" onclick="switchTab('logs')">📊 Logs</button>
+                    <button class="ai-tab" onclick="switchTab('api')">🔧 API</button>
+                </div>
+
+                <!-- Chat Tab -->
+                <div class="ai-tab-content active" id="chatTab">
+                    <div class="ai-chat-messages" id="chatMessages">
+                        <div class="ai-message bot">
+                            <div class="ai-avatar">🤖</div>
+                            <div class="ai-message-content">
+                                <div class="ai-message-text">
+                                    🔌 <strong>Omni AI Assistant Initialized</strong><br><br>
+                                    • Select a model from the sidebar<br>
+                                    • Start chatting with AI<br>
+                                    • Check API status in the API tab<br>
+                                    • View logs in the Logs tab<br><br>
+                                    <em>Connecting to Ollama backend...</em>
+                                </div>
+                                <div class="ai-message-time">Just now</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ai-typing" id="typingIndicator" style="display: none;">
+                        <div class="ai-dot"></div>
+                        <div class="ai-dot"></div>
+                        <div class="ai-dot"></div>
+                        <span style="margin-left: 10px; color: var(--text-secondary);">AI is thinking...</span>
+                    </div>
+
+                    <div class="ai-input-area">
+                        <div class="ai-input-group">
+                            <input type="text" class="ai-input" id="messageInput" 
+                                   placeholder="Type your message here... (Press Enter to send)"
+                                   onkeypress="if(event.key === 'Enter') sendMessage()">
+                            <button class="ai-send-btn" onclick="sendMessage()">
+                                <i class="fa-solid fa-paper-plane"></i> Send
+                            </button>
+                        </div>
+                        <div class="ai-quick-commands">
+                            <button class="ai-quick-btn" onclick="setPrompt('Write a Python calculator script')">Python Code</button>
+                            <button class="ai-quick-btn" onclick="setPrompt('Explain quantum computing simply')">Explain Tech</button>
+                            <button class="ai-quick-btn" onclick="setPrompt('How to bypass Roblox AC?')">Roblox Help</button>
+                            <button class="ai-quick-btn" onclick="setPrompt('Write a HTML login page')">HTML Example</button>
+                            <button class="ai-quick-btn" onclick="setPrompt('What models are available?')">Model Info</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logs Tab -->
+                <div class="ai-tab-content" id="logsTab">
+                    <div style="padding: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3><i class="fa-solid fa-file-lines"></i> SYSTEM LOGS</h3>
+                            <button class="btn btn-blur" onclick="loadLogs()" style="padding: 8px 16px;">
+                                <i class="fa-solid fa-rotate"></i> Refresh
+                            </button>
+                        </div>
+                        <div class="ai-log-container" id="logsContainer">
+                            <div class="loading">Loading logs...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API Tab -->
+                <div class="ai-tab-content" id="apiTab">
+                    <div style="padding: 1.5rem;">
+                        <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-plug"></i> API STATUS</h3>
+                        
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                <strong>Ollama Status:</strong>
+                                <span id="apiStatusText" style="color: #f59e0b;">Checking...</span>
+                                <button class="btn btn-blur" onclick="checkAPIStatus()" style="padding: 8px 16px; font-size: 0.9rem;">
+                                    <i class="fa-solid fa-sync"></i> Check
+                                </button>
+                            </div>
+                            <div id="apiDetails" style="color: var(--text-secondary); font-size: 0.9rem;">
+                                <!-- Детали загрузятся динамически -->
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 12px;">
+                            <h4 style="margin-bottom: 1rem;">📡 Direct API Test</h4>
+                            <div style="margin-bottom: 1rem;">
+                                <div style="font-size: 0.9rem; margin-bottom: 5px;">Endpoint:</div>
+                                <code style="background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 6px; display: block; margin-bottom: 10px;">
+                                    POST http://localhost:5000/api/ollama/chat
+                                </code>
+                            </div>
+                            <button class="btn btn-fill" onclick="testDirectAPI()" style="width: 100%; padding: 1rem;">
+                                <i class="fa-solid fa-paper-plane"></i> Test API Connection
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="logo" style="margin-bottom: 1rem;">
+                        <i class="fa-solid fa-brain"></i>
+                        <span>OMNI AI</span>
+                    </div>
+                </div>
+                <div>
+                    <h4>AI Tools</h4>
+                    <ul class="footer-links">
+                        <li><a href="/ai">Chat Interface</a></li>
+                        <li><a href="#">Model Selection</a></li>
+                        <li><a href="#">API Docs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="http://localhost:5000/api/ollama/status" target="_blank">API Status</a></li>
+                        <li><a href="http://localhost:11434" target="_blank">Ollama</a></li>
+                        <li><a href="#">Logs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://discord.gg/4NDBJasN" target="_blank">Discord</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Report Issue</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="margin-top: 3rem; text-align: center; color: rgba(255,255,255,0.2); font-size: 0.8rem;">
+                &copy; 2026 Omni Project - Real AI Integration via Ollama API
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Конфигурация
+        const CONFIG = {
+            API_BASE: 'http://localhost:5000',
+            ENDPOINTS: {
+                STATUS: '/api/ollama/status',
+                TAGS: '/api/ollama/tags',
+                CHAT: '/api/ollama/chat',
+                HISTORY: '/api/chat/history',
+                LOGS: '/api/logs/recent',
+                USER_CREATE: '/api/user/create',
+                CHECK_MODELS: '/api/models/check'
+            }
+        };
+
+        // Состояние приложения
+        let currentUser = {
+            id: null,
+            name: 'Guest',
+            created: false
+        };
+        
+        let currentModel = null;
+        let messageCount = 0;
+        let apiCalls = 0;
+        let models = [];
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initializeApp();
+            checkAPIStatus();
+            loadModels();
+        });
+
+        async function initializeApp() {
+            // Создаем или получаем пользователя
+            try {
+                const response = await fetch(`${CONFIG.API_BASE}${CONFIG.ENDPOINTS.USER_CREATE}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: `User${Math.floor(Math.random() * 1000)}`
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    currentUser = {
+                        id: data.user_id,
+                        name: data.username,
+                        created: true
+                    };
+                    
+                    // Обновляем UI
+                    document.getElementById('userAvatar').style.display = 'flex';
+                    document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+                    document.getElementById('currentUser').textContent = currentUser.name;
+                    document.getElementById('userInfo').style.display = 'block';
+                    
+                    addMessage(`👋 Welcome, ${currentUser.name}! I'm Omni AI Assistant.`, 'bot');
+                }
+            } catch (error) {
+                console.error('Failed to create user:', error);
+                // Используем анонимного пользователя
+                currentUser.id = 'anonymous_' + Math.random().toString(36).substr(2, 9);
+                addMessage(`👋 Welcome! I'm Omni AI Assistant.`, 'bot');
+            }
+        }
+
+        async function checkAPIStatus() {
+            const statusText = document.getElementById('apiStatusText');
+            const ollamaStatusText = document.getElementById('ollamaStatusText');
+            
+            statusText.textContent = 'Checking...';
+            statusText.style.color = '#f59e0b';
+            ollamaStatusText.textContent = 'Checking...';
+            ollamaStatusText.style.color = '#f59e0b';
+            
+            try {
+                const response = await fetch(`${CONFIG.API_BASE}${CONFIG.ENDPOINTS.STATUS}`);
+                const data = await response.json();
+                
+                if (data.status === 'online') {
+                    statusText.textContent = 'Online ✓';
+                    statusText.style.color = '#4cd964';
+                    ollamaStatusText.textContent = 'Online ✓';
+                    ollamaStatusText.style.color = '#4cd964';
+                    
+                    // Показываем детали
+                    document.getElementById('apiDetails').innerHTML = `
+                        <div>Response time: ${data.response_time}s</div>
+                        <div>Models found: ${data.models_count}</div>
+                        <div>Version: ${data.ollama_version || 'unknown'}</div>
+                    `;
+                    
+                    addLog(`[INFO] Ollama API: Online (${data.models_count} models)`);
+                } else {
+                    statusText.textContent = 'Offline ✗';
+                    statusText.style.color = '#ff3b30';
+                    ollamaStatusText.textContent = 'Offline ✗';
+                    ollamaStatusText.style.color = '#ff3b30';
+                    
+                    document.getElementById('apiDetails').innerHTML = `
+                        <div style="color: #ff3b30;">Error: ${data.error}</div>
+                    `;
+                    
+                    addLog(`[ERROR] Ollama API: ${data.error}`);
+                }
+            } catch (error) {
+                statusText.textContent = 'Error ✗';
+                statusText.style.color = '#ff3b30';
+                ollamaStatusText.textContent = 'Error ✗';
+                ollamaStatusText.style.color = '#ff3b30';
+                
+                document.getElementById('apiDetails').innerHTML = `
+                    <div style="color: #ff3b30;">Cannot connect to API server</div>
+                `;
+                
+                addLog(`[ERROR] API connection failed: ${error.message}`);
+            }
+        }
+
+        async function loadModels() {
+            const modelList = document.getElementById('modelList');
+            modelList.innerHTML = '<div class="loading">Loading models...</div>';
+            
+            try {
+                const response = await fetch(`${CONFIG.API_BASE}${CONFIG.ENDPOINTS.TAGS}`);
+                const data = await response.json();
+                
+                if (data.success && data.models.length > 0) {
+                    models = data.models;
+                    
+                    let html = '';
+                    models.forEach((model, index) => {
+                        const modelName = model.name;
+                        const isActive = currentModel === modelName;
+                        
+                        html += `
+                            <div class="ai-model-item ${isActive ? 'active' : ''}" 
+                                 onclick="selectModel('${modelName}')"
+                                 title="${modelName} (${(model.size / 1024 / 1024 / 1024).toFixed(2)} GB)">
+                                <span class="ai-model-name">${modelName.split(':')[0]}</span>
+                                <span class="ai-model-status status-online">✓</span>
+                            </div>
+                        `;
+                    });
+                    
+                    modelList.innerHTML = html;
+                    
+                    // Выбираем первую модель по умолчанию
+                    if (models.length > 0 && !currentModel) {
+                        selectModel(models[0].name);
+                    }
+                    
+                    addLog(`[INFO] Loaded ${models.length} models`);
+                } else {
+                    modelList.innerHTML = '<div style="color: #ff3b30; padding: 20px; text-align: center;">No models found</div>';
+                    addLog(`[WARN] No models available`);
+                }
+            } catch (error) {
+                modelList.innerHTML = '<div style="color: #ff3b30; padding: 20px; text-align: center;">Failed to load models</div>';
+                addLog(`[ERROR] Failed to load models: ${error.message}`);
+            }
+        }
+
+        function selectModel(modelName) {
+            currentModel = modelName;
+            
+            // Обновляем UI
+            document.querySelectorAll('.ai-model-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            const selectedItem = document.querySelector(`.ai-model-item[onclick*="${modelName}"]`);
+            if (selectedItem) {
+                selectedItem.classList.add('active');
+            }
+            
+            document.getElementById('currentModelLabel').textContent = modelName;
+            document.getElementById('currentModelStat').textContent = modelName;
+            
+            // Обновляем бейдж статуса
+            const badge = document.getElementById('modelStatusBadge');
+            badge.textContent = 'Selected';
+            badge.style.background = 'rgba(76, 217, 100, 0.2)';
+            badge.style.color = '#4cd964';
+            
+            addLog(`[INFO] Selected model: ${modelName}`);
+            addMessage(`✅ Switched to model: **${modelName}**`, 'bot');
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            if (!currentModel) {
+                addMessage('❌ Please select a model first!', 'bot');
+                return;
+            }
+            
+            // Добавляем сообщение пользователя
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Показываем индикатор
+            document.getElementById('typingIndicator').style.display = 'flex';
+            
+            try {
+                // Отправляем запрос через наш прокси
+                const startTime = Date.now();
+                
+                const response = await fetch(`${CONFIG.API_BASE}${CONFIG.ENDPOINTS.CHAT}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-User-Id': currentUser.id,
+                        'X-Username': currentUser.name
+                    },
+                    body: JSON.stringify({
+                        model: currentModel,
+                        messages: [
+                            { 
+                                role: 'system', 
+                                content: 'You are a helpful AI assistant. Answer in clear, concise language.' 
+                            },
+                            { role: 'user', content: message }
+                        ],
+                        stream: false,
+                        options: {
+                            temperature: 0.7,
+                            num_predict: 1000
+                        }
+                    })
+                });
+                
+                const responseTime = Date.now() - startTime;
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        addMessage(data.response, 'bot');
+                        
+                        // Обновляем статистику
+                        messageCount++;
+                        apiCalls++;
+                        updateStats();
+                        updateResponseTime(responseTime);
+                        
+                        addLog(`[SUCCESS] AI response (${responseTime}ms): ${message.substring(0, 50)}...`);
+                    } else {
+                        throw new Error(data.error || 'Unknown error');
+                    }
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP ${response.status}`);
+                }
+                
+            } catch (error) {
+                console.error('Chat error:', error);
+                addMessage(`❌ Error: ${error.message}`, 'bot');
+                addLog(`[ERROR] Chat failed: ${error.message}`);
+            } finally {
+                document.getElementById('typingIndicator').style.display = 'none';
+            }
+        }
+
+        async function loadChatHistory() {
+            try {
+                const response = await fetch(
+                    `${CONFIG.API_BASE}${CONFIG.ENDPOINTS.HISTORY}?user_id=${currentUser.id}&limit=10`
+                );
+                
+                const data = await response.json();
+                
+                if (data.success && data.recent_dialogs.length > 0) {
+                    // Показываем историю
+                    data.recent_dialogs.forEach(dialog => {
+                        dialog.forEach(msg => {
+                            if (msg.role === 'user') {
+                                addMessage(msg.content, 'user');
+                            } else if (msg.role === 'assistant') {
+                                addMessage(msg.content, 'bot');
+                            }
+                        });
+                    });
+                    
+                    addLog(`[INFO] Loaded ${data.recent_dialogs.length} dialogs from history`);
+                } else {
+                    addMessage('No chat history found.', 'bot');
+                }
+            } catch (error) {
+                addMessage('Failed to load chat history.', 'bot');
+                addLog(`[ERROR] Failed to load history: ${error.message}`);
+            }
+        }
+
+        async function loadLogs() {
+            const container = document.getElementById('logsContainer');
+            container.innerHTML = '<div class="loading">Loading logs...</div>';
+            
+            try {
+                const response = await fetch(`${CONFIG.API_BASE}${CONFIG.ENDPOINTS.LOGS}?limit=20`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    let html = '';
+                    data.logs.forEach(log => {
+                        const time = new Date(log.timestamp).toLocaleTimeString();
+                        let cssClass = 'log-info';
+                        if (log.error) cssClass = 'log-error';
+                        if (log.response && !log.error) cssClass = 'log-success';
+                        
+                        html += `
+                            <div class="ai-log-entry ${cssClass}">
+                                [${time}] ${log.platform.toUpperCase()} | 
+                                ${log.username}: ${log.message?.substring(0, 50) || 'No message'}...
+                                ${log.error ? `<br><small style="color: #ff3b30;">Error: ${log.error}</small>` : ''}
+                            </div>
+                        `;
+                    });
+                    
+                    container.innerHTML = html;
+                }
+            } catch (error) {
+                container.innerHTML = `<div style="color: #ff3b30; padding: 20px; text-align: center;">Failed to load logs: ${error.message}</div>`;
+            }
+        }
+
+        async function checkAllModels() {
+            if (models.length === 0) {
+                addMessage('No models loaded. Please load models first.', 'bot');
+                return;
+            }
+            
+            addMessage('🔍 Testing all available models...', 'bot');
+            
+            try {
+                const response = await fetch(`${CONFIG.API_BASE}${CONFIG.ENDPOINTS.CHECK_MODELS}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        models: models.map(m => m.name)
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    data.results.forEach(result => {
+                        const status = result.status === 'online' ? '✅ Online' : '❌ Offline';
+                        addMessage(`${result.model}: ${status}`, 'bot');
+                    });
+                    
+                    addLog(`[INFO] Model check completed: ${data.results.filter(r => r.status === 'online').length}/${data.results.length} online`);
+                }
+            } catch (error) {
+                addMessage(`❌ Failed to test models: ${error.message}`, 'bot');
+            }
+        }
+
+        async function testDirectAPI() {
+            addMessage('🔧 Testing direct API connection...', 'bot');
+            
+            try {
+                const testResponse = await fetch(`${CONFIG.API_BASE}${CONFIG.ENDPOINTS.CHAT}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: currentModel || 'llama2',
+                        messages: [{ role: 'user', content: 'Hello, are you working?' }],
+                        stream: false
+                    })
+                });
+                
+                if (testResponse.ok) {
+                    addMessage('✅ API test successful! Connection is working.', 'bot');
+                    addLog('[SUCCESS] API test passed');
+                } else {
+                    throw new Error(`HTTP ${testResponse.status}`);
+                }
+            } catch (error) {
+                addMessage(`❌ API test failed: ${error.message}`, 'bot');
+                addLog(`[ERROR] API test failed: ${error.message}`);
+            }
+        }
+
+        function addMessage(text, sender) {
+            const container = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `ai-message ${sender}`;
+            
+            const now = new Date();
+            const time = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            // Форматирование текста
+            let formattedText = text;
+            formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            formattedText = formattedText.replace(/\`\`\`(\w+)?\n([\s\S]*?)\`\`\`/g, '<pre><code>$2</code></pre>');
+            formattedText = formattedText.replace(/\`(.*?)\`/g, '<code>$1</code>');
+            formattedText = formattedText.replace(/\n/g, '<br>');
+            
+            messageDiv.innerHTML = `
+                <div class="ai-avatar">${sender === 'user' ? '👤' : '🤖'}</div>
+                <div class="ai-message-content">
+                    <div class="ai-message-text">${formattedText}</div>
+                    <div class="ai-message-time">${time}</div>
+                </div>
+            `;
+            
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function addLog(message) {
+            const time = new Date().toLocaleTimeString();
+            console.log(`[${time}] ${message}`);
+        }
+
+        function updateStats() {
+            document.getElementById('messageCount').textContent = messageCount;
+            document.getElementById('apiCallCount').textContent = apiCalls;
+        }
+
+        function updateResponseTime(time) {
+            document.getElementById('responseTimeStat').textContent = `${time}ms`;
+        }
+
+        function setPrompt(text) {
+            document.getElementById('messageInput').value = text;
+            document.getElementById('messageInput').focus();
+        }
+
+        function clearChat() {
+            if (confirm('Clear chat history?')) {
+                document.getElementById('chatMessages').innerHTML = `
+                    <div class="ai-message bot">
+                        <div class="ai-avatar">🤖</div>
+                        <div class="ai-message-content">
+                            <div class="ai-message-text">
+                                Chat history cleared. Ready for new questions!
+                            </div>
+                            <div class="ai-message-time">Just now</div>
+                        </div>
+                    </div>
+                `;
+                messageCount = 0;
+                updateStats();
+                addLog('[INFO] Chat history cleared');
+            }
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.ai-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.ai-tab-content').forEach(content => content.classList.remove('active'));
+            
+            if (tabName === 'chat') {
+                document.querySelector('.ai-tab').classList.add('active');
+                document.getElementById('chatTab').classList.add('active');
+            } else if (tabName === 'logs') {
+                document.querySelectorAll('.ai-tab')[1].classList.add('active');
+                document.getElementById('logsTab').classList.add('active');
+                loadLogs();
+            } else if (tabName === 'api') {
+                document.querySelectorAll('.ai-tab')[2].classList.add('active');
+                document.getElementById('apiTab').classList.add('active');
+            }
+        }
+
+        function showLogsTab() {
+            switchTab('logs');
+        }
+
+        function showAPITab() {
+            switchTab('api');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - OMNI PROJECT</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #0a0d0f;
+            --bg-card: rgba(82, 82, 82, 0.04);
+            --accent: #66a5ee;
+            --accent-glow: rgba(102, 165, 238, 0.1);
+            --border: rgba(255, 255, 255, 0.04);
+            --text-primary: #FFFFFF;
+            --text-secondary: #9ca3af;
+            --radius: 8px;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: var(--bg-main);
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            z-index: 10;
+        }
+
+        .auth-card {
+            background: #0d1113;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+            backdrop-filter: blur(12px);
+            animation: slideInUp 0.5s ease-out;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+        }
+
+        /* Input Groups */
+        .input-group {
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-with-icon {
+            width: 100%;
+            border: none;
+            outline: none;
+            border-radius: 15px;
+            padding: 1em 1em 1em 3.5em;
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: inset 2px 5px 10px rgba(0, 0, 0, 0.3);
+            transition: 300ms ease-in-out;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .input-with-icon::placeholder {
+            color: var(--text-secondary);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .input-with-icon:focus {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(102, 165, 238, 0.3),
+                        inset 2px 5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Icons */
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            width: 1.2rem;
+            height: 1.2rem;
+            color: var(--text-secondary);
+            transition: color 300ms ease-in-out;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .input-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: currentColor;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        .input-with-icon:focus ~ .input-icon {
+            color: var(--accent);
+        }
+
+        /* Password Inputs */
+        .password-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            border-radius: 15px;
+            padding: 1em 3em 1em 3.5em;
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: inset 2px 5px 10px rgba(0, 0, 0, 0.3);
+            transition: 300ms ease-in-out;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        /* Show Password Button */
+        .show-password {
+            position: absolute;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: color 300ms ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            z-index: 2;
+        }
+
+        .show-password:hover {
+            color: var(--accent);
+        }
+
+        /* Tabs */
+        .tab-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 0.5rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 300ms ease-in-out;
+        }
+
+        .tab-btn.active {
+            background: rgba(102, 165, 238, 0.2);
+            border-color: rgba(102, 165, 238, 0.5);
+            color: var(--accent);
+            box-shadow: 0 0 15px rgba(102, 165, 238, 0.2);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--text-secondary);
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 1em;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(102, 165, 238, 0.8), rgba(99, 102, 241, 0.8));
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 300ms ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 25px rgba(102, 165, 238, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Messages */
+        .message {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            min-height: 20px;
+            font-family: 'Inter', sans-serif;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .success {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+            color: #10b981;
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            color: #ef4444;
+        }
+
+        /* Titles */
+        .auth-card h1 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-card p.subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="no-fouc">
+    <!-- Background Effects -->
+    <div class="bg-noise"></div>
+    <div class="bg-rays"></div>
+    <div class="bg-mouse-glow"></div>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <a href="/" class="back-link">
+                <i class="fa-solid fa-arrow-left"></i> 
+                <span>Home</span>
+            </a>
+
+            <div style="text-align: center; margin-bottom: 2rem; margin-top: 1rem;">
+                <h1>Welcome Back</h1>
+                <p class="subtitle">Login to your account dashboard</p>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="tab-group">
+                <button class="tab-btn active" id="loginTab">Login</button>
+                <button class="tab-btn" id="registerTab">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm">
+                <!-- Username -->
+                <div class="input-group">
+                    <div class="input-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 15C8.829 15 6.01099 16.5306 4.21597 18.906C3.82968 19.4172 3.63653 19.6728 3.64285 20.0183C3.64773 20.2852 3.81533 20.6219 4.02534 20.7867C4.29716 21 4.67384 21 5.42737 21H18.5726C19.3262 21 19.7028 21 19.9747 20.7867C20.1847 20.6219 20.3523 20.2852 20.3571 20.0183C20.3635 19.6728 20.1703 19.4172 19.784 18.906C17.989 16.5306 15.171 15 12 15Z" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <input class="input-with-icon" type="text" id="loginUsername" placeholder="Username" autocomplete="off" required>
+                </div>
+                
+                <!-- Password -->
+                <div class="input-group">
+                    <div class="input-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"></path>
+                        </svg>
+                    </div>
+                    <input class="password-input" type="password" id="loginPassword" placeholder="Password" autocomplete="off" required>
+                    <button type="button" class="show-password" data-target="loginPassword">
+                        <i class="fa-regular fa-eye"></i>
+                    </button>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fa-solid fa-sign-in-alt"></i>
+                    Login
+                </button>
+                <p id="authMessage" class="message"></p>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" style="display: none;">
+                <!-- Username -->
+                <div class="input-group">
+                    <div class="input-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 15C8.829 15 6.01099 16.5306 4.21597 18.906C3.82968 19.4172 3.63653 19.6728 3.64285 20.0183C3.64773 20.2852 3.81533 20.6219 4.02534 20.7867C4.29716 21 4.67384 21 5.42737 21H18.5726C19.3262 21 19.7028 21 19.9747 20.7867C20.1847 20.6219 20.3523 20.2852 20.3571 20.0183C20.3635 19.6728 20.1703 19.4172 19.784 18.906C17.989 16.5306 15.171 15 12 15Z" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <input class="input-with-icon" type="text" id="registerUsername" placeholder="Username" autocomplete="off" required>
+                </div>
+                
+                <!-- Password -->
+                <div class="input-group">
+                    <div class="input-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"></path>
+                        </svg>
+                    </div>
+                    <input class="password-input" type="password" id="registerPassword" placeholder="Password" autocomplete="off" required>
+                    <button type="button" class="show-password" data-target="registerPassword">
+                        <i class="fa-regular fa-eye"></i>
+                    </button>
+                </div>
+                
+                <!-- Confirm Password -->
+                <div class="input-group">
+                    <div class="input-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" 
+                                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <input class="password-input" type="password" id="registerConfirmPassword" placeholder="Confirm Password" autocomplete="off" required>
+                    <button type="button" class="show-password" data-target="registerConfirmPassword">
+                        <i class="fa-regular fa-eye"></i>
+                    </button>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Create Account
+                </button>
+                <p id="registerMessage" class="message"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Script -->
+    <script src="../script.js"></script>
+    
+    <!-- Mark as loaded -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.remove('no-fouc');
+            document.body.classList.add('loaded');
+            // Auto focus on username field
+            const usernameField = document.getElementById('loginUsername');
+            if (usernameField) {
+                setTimeout(() => usernameField.focus(), 300);
+            }
+        });
+    </script>
+</body>
+</html>
